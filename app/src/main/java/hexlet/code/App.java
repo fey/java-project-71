@@ -8,13 +8,14 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import java.nio.file.Files;
+import java.util.concurrent.Callable;
 
 @Command(
         name = "gendiff",
         mixinStandardHelpOptions = true,
         description = "Compares two configuration files and shows a difference."
 )
-public class App {
+public class App implements Callable {
     @Option(names = {"-f", "--format"}, description = "output format", defaultValue = "stylish")
     private String format;
 
@@ -29,7 +30,7 @@ public class App {
         System.exit(exitCode);
     }
 
-    public String call() {
+    public String call() throws Exception {
         return Differ.generate(filepath1, filepath2, format);
     }
 }
