@@ -3,8 +3,33 @@
  */
 package hexlet.code;
 
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+
+import java.nio.file.Files;
+
+@Command(
+        name = "gendiff",
+        mixinStandardHelpOptions = true,
+        description = "Compares two configuration files and shows a difference."
+)
 public class App {
+    @Option(names = {"-f", "--format"}, description = "output format", defaultValue = "stylish")
+    private String format;
+
+    @CommandLine.Parameters(index = "0", description = "path to first file")
+    private String filepath1;
+
+    @CommandLine.Parameters(index = "1", description = "path to second file")
+    private String filepath2;
+
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        int exitCode = new CommandLine(new App()).execute(args);
+        System.exit(exitCode);
+    }
+
+    public String call() {
+        return Differ.generate(filepath1, filepath2, format);
     }
 }

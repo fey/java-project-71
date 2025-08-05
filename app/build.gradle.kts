@@ -23,6 +23,8 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+    implementation("info.picocli:picocli:4.7.5") // или актуальную версию
+    annotationProcessor("info.picocli:picocli-codegen:4.7.5") // если используешь @Command и хочешь AOT
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
