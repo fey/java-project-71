@@ -7,7 +7,6 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-import java.nio.file.Files;
 import java.util.concurrent.Callable;
 
 @Command(

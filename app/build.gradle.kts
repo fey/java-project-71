@@ -24,6 +24,7 @@ dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
     implementation("info.picocli:picocli:4.7.5") // или актуальную версию
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0")
     annotationProcessor("info.picocli:picocli-codegen:4.7.5") // если используешь @Command и хочешь AOT
 }
 
