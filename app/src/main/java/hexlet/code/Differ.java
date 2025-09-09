@@ -1,29 +1,92 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
 
 public class Differ {
     public static String generate(String filepath1, String filepath2, String format) throws Exception {
         var fileContent1 = Files.readString(Path.of(filepath1));
         var fileContent2 = Files.readString(Path.of(filepath2));
-        System.out.println(fileContent1);
 
         var mapper = new ObjectMapper();
 
-        var data1 = mapper.readTree(fileContent1);
-        var data2 = mapper.readTree(fileContent2);
+        var data1 = mapper.readValue(fileContent1, new TypeReference<Map<String,Object>>(){});
+        var data2 = mapper.readValue(fileContent2, new TypeReference<Map<String,Object>>(){});
 
-        System.out.println(data1.get("host"));
-        System.out.println(data2);
+        var keys1 = data1.keySet();
+        var keys2 = data2.keySet();
 
-        return "";
+        var keys = new ArrayList<>(
+                Sets.union(keys1, keys2)
+        );
+
+        keys.sort(String.CASE_INSENSITIVE_ORDER);
+
+        var diff = new LinkedList<DiffNode>();
+
+        for (var key: keys) {
+            var node = new DiffNode();
+            var value1 = data1.get(key);
+            var value2 = data2.get(key);
+            if (keys1.contains(key) && keys2.contains(key) && value1.equals(value2)) {
+                node.key = key;
+                node.type = DiffNode.NodeType.UNCHANGED;
+                node.value1 = data1.get(key);
+            } else if (keys1.contains(key) && keys2.contains(key) && !value1.equals(value2)) {
+                node.key = key;
+                node.type = DiffNode.NodeType.CHANGED;
+                node.value1 = data1.get(key);
+                node.value2 = data2.get(key);
+            } else if (keys1.contains(key) && !keys2.contains(key)) {
+                node.key = key;
+                node.type = DiffNode.NodeType.REMOVED;
+                node.value1 = data1.get(key);
+            } else if (!keys1.contains(key) && keys2.contains(key)) {
+                node.key = key;
+                node.type = DiffNode.NodeType.ADDED;
+                node.value2 = data2.get(key);
+            }
+            diff.add(node);
+        }
+
+        return stylish(diff);
     }
 
     public static String generate(String filepath1, String filepath2) throws Exception {
         return generate(filepath1, filepath2, "stylish");
+    }
+
+    public static String stylish(List<DiffNode> diff) {
+        var stringJoiner = new StringJoiner("\n", "{\n", "\n}");
+
+        for (var node: diff) {
+            switch(node.type) {
+                case UNCHANGED:
+                    stringJoiner.add(String.format("    %s: %s", node.key, node.value1));
+                    break;
+                case ADDED:
+                    stringJoiner.add(String.format("  + %s: %s", node.key, node.value2));
+                    break;
+                case REMOVED:
+                    stringJoiner.add(String.format("  - %s: %s", node.key, node.value1));
+                    break;
+                case CHANGED:
+                    stringJoiner.add(String.format("  - %s: %s", node.key, node.value1));
+                    stringJoiner.add(String.format("  + %s: %s", node.key, node.value2));
+                    break;
+            }
+        }
+
+        return stringJoiner.toString();
     }
 }

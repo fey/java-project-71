@@ -25,11 +25,16 @@ public class App implements Callable {
     private String filepath2;
 
     public static void main(String[] args) {
-        int exitCode = new CommandLine(new App()).execute(args);
+        var exitCode = new CommandLine(new App()).execute(args);
         System.exit(exitCode);
     }
 
-    public String call() throws Exception {
-        return Differ.generate(filepath1, filepath2, format);
+    @Override
+    public Integer call() throws Exception {
+        var diff = Differ.generate(filepath1, filepath2, format);
+
+        System.out.println(diff);
+
+        return 0;
     }
 }
