@@ -6,8 +6,6 @@ public class DiffNode {
         ADDED,
         REMOVED,
         CHANGED,
-        ROOT,
-        NESTED
     }
 
     public String key;
