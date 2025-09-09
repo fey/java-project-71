@@ -7,9 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 import static com.google.common.io.Files.getFileExtension;
 
@@ -60,7 +58,7 @@ public class Differ {
             diff.add(node);
         }
 
-        return stylish(diff);
+        return Formatter.format(diff, format);
     }
 
     private static String getFileContent(String filepath1) throws IOException {
@@ -71,29 +69,4 @@ public class Differ {
         return generate(filepath1, filepath2, "stylish");
     }
 
-    private static String stylish(List<DiffNode> diff) {
-        var stringJoiner = new StringJoiner("\n", "{\n", "\n}");
-
-        for (var node: diff) {
-            switch (node.type) {
-                case UNCHANGED:
-                    stringJoiner.add(String.format("    %s: %s", node.key, node.value1));
-                    break;
-                case ADDED:
-                    stringJoiner.add(String.format("  + %s: %s", node.key, node.value2));
-                    break;
-                case REMOVED:
-                    stringJoiner.add(String.format("  - %s: %s", node.key, node.value1));
-                    break;
-                case CHANGED:
-                    stringJoiner.add(String.format("  - %s: %s", node.key, node.value1));
-                    stringJoiner.add(String.format("  + %s: %s", node.key, node.value2));
-                    break;
-                default:
-                    throw new RuntimeException("Invalid node type.");
-            }
-        }
-
-        return stringJoiner.toString();
-    }
 }
