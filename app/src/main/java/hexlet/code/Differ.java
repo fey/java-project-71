@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Sets;
 
 import java.io.IOException;
@@ -28,15 +29,12 @@ public class Differ {
         var keys1 = data1.keySet();
         var keys2 = data2.keySet();
 
-        var unionKeys = new ArrayList<>(
-                Sets.union(keys1, keys2)
-        );
-
-        unionKeys.sort(String.CASE_INSENSITIVE_ORDER);
+        var unionKeys = Sets.union(keys1, keys2);
+        var sortedKeys = ImmutableSortedSet.copyOf(unionKeys);
 
         var diff = new LinkedList<DiffNode>();
 
-        for (var key: unionKeys) {
+        for (var key: sortedKeys) {
             DiffNode node = null;
             var value1 = data1.get(key);
             var value2 = data2.get(key);
