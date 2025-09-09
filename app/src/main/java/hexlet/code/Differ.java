@@ -57,7 +57,7 @@ public class Differ {
                         value1,
                         null
                 );
-            } else if (!keys1.contains(key) && keys2.contains(key)) {
+            } else {
                 node = new DiffNode(key, ADDED, null, value2);
             }
 
