@@ -8,16 +8,11 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.util.Map;
 
 public class Parser {
-    public enum Format {
-        yaml,
-        yml,
-        json;
-    }
-
-    public static Map<String, Object> parse(String data, Format format) throws JsonProcessingException {
+    public static Map<String, Object> parse(String data, String format) throws JsonProcessingException {
         return switch (format) {
-            case Format.yaml, Format.yml -> parseYaml(data);
-            case Format.json -> parseJson(data);
+            case "yaml", "yml" -> parseYaml(data);
+            case "json" -> parseJson(data);
+            default -> throw new IllegalStateException("Unexpected value: " + format);
         };
     }
 

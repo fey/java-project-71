@@ -1,7 +1,5 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 
 import java.io.IOException;
@@ -14,7 +12,6 @@ import java.util.StringJoiner;
 
 import static com.google.common.io.Files.getFileExtension;
 
-
 public class Differ {
     public static String generate(String filepath1, String filepath2, String format) throws Exception {
         var fileContent1 = getFileContent(filepath1);
@@ -22,8 +19,8 @@ public class Differ {
         var fileContent2 = getFileContent(filepath2);
         var ext2 = getFileExtension(filepath1);
 
-        var data1 = Parser.parse(fileContent1, Parser.Format.valueOf(ext1));
-        var data2 = Parser.parse(fileContent2, Parser.Format.valueOf(ext2));
+        var data1 = Parser.parse(fileContent1, ext1.toLowerCase());
+        var data2 = Parser.parse(fileContent2, ext2.toLowerCase());
 
         var keys1 = data1.keySet();
         var keys2 = data2.keySet();
