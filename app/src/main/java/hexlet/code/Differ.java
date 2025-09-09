@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 import static com.google.common.io.Files.getFileExtension;
@@ -25,23 +26,24 @@ public class Differ {
         var keys1 = data1.keySet();
         var keys2 = data2.keySet();
 
-        var keys = new ArrayList<>(
+        var unionKeys = new ArrayList<>(
                 Sets.union(keys1, keys2)
         );
 
-        keys.sort(String.CASE_INSENSITIVE_ORDER);
+        unionKeys.sort(String.CASE_INSENSITIVE_ORDER);
 
         var diff = new LinkedList<DiffNode>();
 
-        for (var key: keys) {
+        for (var key: unionKeys) {
             var node = new DiffNode();
             var value1 = data1.get(key);
             var value2 = data2.get(key);
-            if (keys1.contains(key) && keys2.contains(key) && value1.equals(value2)) {
+
+            if (keys1.contains(key) && keys2.contains(key) && Objects.equals(value1, value2)) {
                 node.key = key;
                 node.type = DiffNode.NodeType.UNCHANGED;
                 node.value1 = data1.get(key);
-            } else if (keys1.contains(key) && keys2.contains(key) && !value1.equals(value2)) {
+            } else if (keys1.contains(key) && keys2.contains(key) && !Objects.equals(value1, value2)) {
                 node.key = key;
                 node.type = DiffNode.NodeType.CHANGED;
                 node.value1 = data1.get(key);
