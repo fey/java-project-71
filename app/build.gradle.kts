@@ -9,6 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
     checkstyle
+    id("io.freefair.lombok") version "9.0.0-rc2"
 }
 
 group = "hexlet.code"

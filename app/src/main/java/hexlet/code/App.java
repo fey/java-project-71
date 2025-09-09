@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
         mixinStandardHelpOptions = true,
         description = "Compares two configuration files and shows a difference."
 )
-public class App implements Callable {
+public final class App implements Callable {
     @Option(names = {"-f", "--format"}, description = "output format", defaultValue = "stylish")
     private String format;
 

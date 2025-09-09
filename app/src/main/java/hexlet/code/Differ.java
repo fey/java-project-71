@@ -10,6 +10,10 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 import static com.google.common.io.Files.getFileExtension;
+import static hexlet.code.DiffNode.NodeType.ADDED;
+import static hexlet.code.DiffNode.NodeType.CHANGED;
+import static hexlet.code.DiffNode.NodeType.REMOVED;
+import static hexlet.code.DiffNode.NodeType.UNCHANGED;
 
 public class Differ {
     public static String generate(String filepath1, String filepath2, String format) throws Exception {
@@ -33,28 +37,30 @@ public class Differ {
         var diff = new LinkedList<DiffNode>();
 
         for (var key: unionKeys) {
-            var node = new DiffNode();
+            DiffNode node = null;
             var value1 = data1.get(key);
             var value2 = data2.get(key);
 
             if (keys1.contains(key) && keys2.contains(key) && Objects.equals(value1, value2)) {
-                node.key = key;
-                node.type = DiffNode.NodeType.UNCHANGED;
-                node.value1 = data1.get(key);
+                node = new DiffNode(key, UNCHANGED, value1, value2);
             } else if (keys1.contains(key) && keys2.contains(key) && !Objects.equals(value1, value2)) {
-                node.key = key;
-                node.type = DiffNode.NodeType.CHANGED;
-                node.value1 = data1.get(key);
-                node.value2 = data2.get(key);
+                node = new DiffNode(
+                        key,
+                        CHANGED,
+                        value1,
+                        value2
+                );
             } else if (keys1.contains(key) && !keys2.contains(key)) {
-                node.key = key;
-                node.type = DiffNode.NodeType.REMOVED;
-                node.value1 = data1.get(key);
+                node = new DiffNode(
+                        key,
+                        REMOVED,
+                        value1,
+                        null
+                );
             } else if (!keys1.contains(key) && keys2.contains(key)) {
-                node.key = key;
-                node.type = DiffNode.NodeType.ADDED;
-                node.value2 = data2.get(key);
+                node = new DiffNode(key, ADDED, null, value2);
             }
+
             diff.add(node);
         }
 

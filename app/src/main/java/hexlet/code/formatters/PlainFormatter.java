@@ -12,27 +12,27 @@ public class PlainFormatter {
 
         for (var node : diff) {
             String line;
-            switch (node.type) {
+            switch (node.getType()) {
                 case UNCHANGED:
                     break;
                 case ADDED:
                     line = String.format(
                             "Property '%s' was added with value: %s",
-                            node.key,
-                            stringifyValue(node.value2)
+                            node.getKey(),
+                            stringifyValue(node.getValue2())
                     );
                     stringJoiner.add(line);
                     break;
                 case REMOVED:
-                    line = String.format("Property '%s' was removed", node.key);
+                    line = String.format("Property '%s' was removed", node.getKey());
                     stringJoiner.add(line);
                     break;
                 case CHANGED:
                     line = String.format(
                             "Property '%s' was updated. From %s to %s",
-                            node.key,
-                            stringifyValue(node.value1),
-                            stringifyValue(node.value2)
+                            node.getKey(),
+                            stringifyValue(node.getValue1()),
+                            stringifyValue(node.getValue2())
                     );
                     stringJoiner.add(line);
                     break;

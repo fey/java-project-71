@@ -10,19 +10,19 @@ public class StylishFormatter {
         var stringJoiner = new StringJoiner("\n", "{\n", "\n}");
 
         for (var node : diff) {
-            switch (node.type) {
+            switch (node.getType()) {
                 case UNCHANGED:
-                    stringJoiner.add(String.format("    %s: %s", node.key, node.value1));
+                    stringJoiner.add(String.format("    %s: %s", node.getKey(), node.getValue1()));
                     break;
                 case ADDED:
-                    stringJoiner.add(String.format("  + %s: %s", node.key, node.value2));
+                    stringJoiner.add(String.format("  + %s: %s", node.getKey(), node.getValue2()));
                     break;
                 case REMOVED:
-                    stringJoiner.add(String.format("  - %s: %s", node.key, node.value1));
+                    stringJoiner.add(String.format("  - %s: %s", node.getKey(), node.getValue1()));
                     break;
                 case CHANGED:
-                    stringJoiner.add(String.format("  - %s: %s", node.key, node.value1));
-                    stringJoiner.add(String.format("  + %s: %s", node.key, node.value2));
+                    stringJoiner.add(String.format("  - %s: %s", node.getKey(), node.getValue1()));
+                    stringJoiner.add(String.format("  + %s: %s", node.getKey(), node.getValue2()));
                     break;
                 default:
                     throw new RuntimeException("Invalid node type.");

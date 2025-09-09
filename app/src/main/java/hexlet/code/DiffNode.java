@@ -1,5 +1,10 @@
 package hexlet.code;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public class DiffNode {
     public enum NodeType {
         UNCHANGED,
@@ -8,8 +13,8 @@ public class DiffNode {
         CHANGED,
     }
 
-    public String key;
-    public NodeType type;
-    public Object value1;
-    public Object value2;
+    private String key;
+    private NodeType type;
+    private Object value1;
+    private Object value2;
 }
