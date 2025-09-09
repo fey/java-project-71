@@ -66,7 +66,7 @@ public class Differ {
         return generate(filepath1, filepath2, "stylish");
     }
 
-    public static String stylish(List<DiffNode> diff) {
+    private static String stylish(List<DiffNode> diff) {
         var stringJoiner = new StringJoiner("\n", "{\n", "\n}");
 
         for (var node: diff) {
