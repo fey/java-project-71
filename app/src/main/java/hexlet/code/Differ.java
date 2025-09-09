@@ -20,8 +20,8 @@ public class Differ {
 
         var mapper = new ObjectMapper();
 
-        var data1 = mapper.readValue(fileContent1, new TypeReference<Map<String,Object>>(){});
-        var data2 = mapper.readValue(fileContent2, new TypeReference<Map<String,Object>>(){});
+        var data1 = mapper.readValue(fileContent1, new TypeReference<Map<String, Object>>() { });
+        var data2 = mapper.readValue(fileContent2, new TypeReference<Map<String, Object>>() { });
 
         var keys1 = data1.keySet();
         var keys2 = data2.keySet();
@@ -70,7 +70,7 @@ public class Differ {
         var stringJoiner = new StringJoiner("\n", "{\n", "\n}");
 
         for (var node: diff) {
-            switch(node.type) {
+            switch (node.type) {
                 case UNCHANGED:
                     stringJoiner.add(String.format("    %s: %s", node.key, node.value1));
                     break;
@@ -84,6 +84,8 @@ public class Differ {
                     stringJoiner.add(String.format("  - %s: %s", node.key, node.value1));
                     stringJoiner.add(String.format("  + %s: %s", node.key, node.value2));
                     break;
+                default:
+                    throw new RuntimeException("Invalid node type.");
             }
         }
 
