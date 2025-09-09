@@ -33,6 +33,18 @@ class DifferTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    void testGenerateYamlStylish() throws Exception {
+        var filePath1 = getFixturePath("file1.yml");
+        var filePath2 = getFixturePath("file2.yml");
+
+        var expected = readFixture("result.stylish");
+
+        var result = Differ.generate(filePath1.toString(), filePath2.toString(), "stylish");
+
+        assertEquals(expected, result);
+    }
+
     private static Path getFixturePath(String filename) {
         return Paths.get("src",  "test", "resources", "fixtures", filename);
     }

@@ -17,19 +17,16 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
-
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    // This dependency is used by the application.
-    implementation(libs.guava)
-    implementation("info.picocli:picocli:4.7.5") // или актуальную версию
+    implementation("com.google.guava:guava:33.4.8-jre")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.19.0")
+    implementation("info.picocli:picocli:4.7.5")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0")
-    annotationProcessor("info.picocli:picocli-codegen:4.7.5") // если используешь @Command и хочешь AOT
+    annotationProcessor("info.picocli:picocli-codegen:4.7.5")
 }
 
-// Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -37,11 +34,9 @@ java {
 }
 
 application {
-    // Define the main class for the application.
     mainClass = "hexlet.code.App"
 }
 
 tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }

@@ -4,24 +4,26 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.StringJoiner;
+
+import static com.google.common.io.Files.getFileExtension;
 
 
 public class Differ {
     public static String generate(String filepath1, String filepath2, String format) throws Exception {
-        var fileContent1 = Files.readString(Path.of(filepath1));
-        var fileContent2 = Files.readString(Path.of(filepath2));
+        var fileContent1 = getFileContent(filepath1);
+        var ext1 = getFileExtension(filepath1);
+        var fileContent2 = getFileContent(filepath2);
+        var ext2 = getFileExtension(filepath1);
 
-        var mapper = new ObjectMapper();
-
-        var data1 = mapper.readValue(fileContent1, new TypeReference<Map<String, Object>>() { });
-        var data2 = mapper.readValue(fileContent2, new TypeReference<Map<String, Object>>() { });
+        var data1 = Parser.parse(fileContent1, Parser.Format.valueOf(ext1));
+        var data2 = Parser.parse(fileContent2, Parser.Format.valueOf(ext2));
 
         var keys1 = data1.keySet();
         var keys2 = data2.keySet();
@@ -60,6 +62,10 @@ public class Differ {
         }
 
         return stylish(diff);
+    }
+
+    private static String getFileContent(String filepath1) throws IOException {
+        return Files.readString(Path.of(filepath1));
     }
 
     public static String generate(String filepath1, String filepath2) throws Exception {
